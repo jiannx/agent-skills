@@ -108,21 +108,29 @@ If the task is narrow, route to one or more child skills instead of expanding th
 - Prefer the smallest sound scope that still covers real product risk.
 - Keep module boundaries explicit and avoid hidden cross-module dependencies.
 - Prefer stable libraries over custom infrastructure for solved problems.
-- Always implement the necessary user-visible states: loading, error, empty, success, and permission-restricted states when relevant.
-- If design artifacts exist, include design verification before sign-off.
-- If backend readiness is deferred, use a deliberate mock strategy rather than ad hoc fake data.
-- Treat environment, observability, and release as required concerns for production-facing work, but not as mandatory deep-design exercises for trivial UI-only tasks.
-- If internationalization is required, treat locale strategy, copy extraction, formatting, and layout resilience as first-class concerns rather than a late-stage patch.
+- Default to the smallest complete set of user-visible states that the task actually needs; add loading, error, empty, success, and permission-restricted states when the feature flow or risk level justifies them.
+- If design artifacts exist, include design verification for high-fidelity or regression-sensitive work; for small or exploratory tasks, a lightweight visual sanity check is usually enough.
+- If backend readiness is deferred, prefer a deliberate mock strategy rather than ad hoc fake data, but keep the mock scope proportional to the delivery goal.
+- Treat environment, observability, and release as required for production-facing or high-risk work, and as recommended context checks for smaller UI-only tasks.
+- If internationalization is required, address locale strategy, copy extraction, formatting, and layout resilience early, but match the depth of the solution to confirmed locale scope.
+
+## Constraint Levels
+
+Interpret the rules in this file using three levels:
+
+- Default: the preferred path for normal implementation, but not mandatory if task context points elsewhere.
+- Recommended: should be applied unless the task is intentionally narrow, exploratory, or time-boxed.
+- Required: only for security-sensitive, production-facing, or explicitly requested work where skipping the rule would create material risk.
 
 ## Cross-Cutting Requirements
 
 These apply regardless of which child skill is activated:
 
-- Accessibility and semantic UI must not be ignored.
+- Accessibility and semantic UI remain required baselines, but implementation depth should match the task surface area.
 - Security-sensitive behavior must stay aligned with backend enforcement.
-- Similar interactions should remain consistent across the product.
-- Styling should prefer theme, tokens, and shared primitives over repeated local overrides.
-- Important assumptions and deviations must be documented explicitly.
+- Similar interactions should remain consistent across the product, while narrow one-off flows may stay local until a stable pattern is proven.
+- Styling should usually prefer theme, tokens, and shared primitives over repeated local overrides, but local implementation is acceptable for truly isolated or experimental work.
+- Important assumptions and deviations should be documented explicitly when they affect maintainability, integration, or rollout decisions.
 - Internationalization should cover copy extraction, locale-aware formatting, and resilience for longer translated text or RTL layout when relevant.
 
 ## Fast Routing Guide

@@ -24,7 +24,7 @@ Use this skill when the task needs quality gates, production-readiness review, r
 
 1. Define quality coverage.
 - Cover critical user journeys, logic-heavy paths, permission changes, and submission flows.
-- Keep screenshot or visual verification in scope when design artifacts matter.
+- Keep screenshot or visual verification in scope when design artifacts matter, but scale the verification effort to the risk of the change.
 
 2. Review performance and observability.
 - Check route splitting, heavy dependencies, large lists, and render hotspots.
@@ -45,7 +45,7 @@ Use this skill when the task needs quality gates, production-readiness review, r
 - Use release markers and diagnostics that help isolate regressions.
 
 ### Release
-- Define rollout, smoke checks, monitoring expectations, and rollback criteria before sign-off.
+- Define rollout, smoke checks, monitoring expectations, and rollback criteria before sign-off for production-facing or high-risk work; use a lighter release note for narrow internal changes.
 
 ## Review Checklist
 

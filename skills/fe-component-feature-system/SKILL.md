@@ -32,7 +32,7 @@ Use this skill when the task involves shared UI architecture, component layering
 
 3. Extract only proven abstractions.
 - Prefer composition, variants, and slots over giant prop surfaces.
-- Move code to shared layers only when the concept is stable across features.
+- Move code to shared layers when the concept is stable across features, or when near-term reuse is well evidenced by the task context.
 
 ## Core Guidance
 
@@ -50,7 +50,7 @@ Use this skill when the task involves shared UI architecture, component layering
 - [ ] Primitive, composite, and domain component boundaries are clear.
 - [ ] Shared components encode stable patterns instead of generic wrappers.
 - [ ] Feature code is co-located by module.
-- [ ] Shared extraction is based on real repetition rather than speculation.
+- [ ] Shared extraction is based on real repetition or well-supported near-term reuse rather than vague speculation.
 
 ## Output Requirements
 

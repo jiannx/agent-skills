@@ -28,7 +28,7 @@ Use this skill when the task centers on translating design artifacts into code w
 - Infer component structure, reusable patterns, spacing, hierarchy, and interaction intent.
 
 2. Implement using shared styling systems.
-- Prefer tokens, semantic color roles, typography scales, shared primitives, and variants over page-local overrides.
+- Prefer tokens, semantic color roles, typography scales, shared primitives, and variants over page-local overrides, but do not force premature abstraction for isolated screens or short-lived experiments.
 
 3. Normalize inconsistency intentionally.
 - If the design is inconsistent, normalize spacing, typography, states, and interaction behavior instead of copying accidental differences.
@@ -46,7 +46,7 @@ Use this skill when the task centers on translating design artifacts into code w
 ### Styling strategy
 - Prefer theme-level and component-level styling over local one-off overrides.
 - Keep business components focused on behavior and composition.
-- Push reusable visual rules into the design-system or shared UI layer.
+- Push reusable visual rules into the design-system or shared UI layer once the pattern is repeated or clearly stable.
 
 ### Interaction consistency
 - Similar workflows should use the same interaction language for validation, loading, success, failure, and destructive actions.
@@ -59,14 +59,14 @@ Use this skill when the task centers on translating design artifacts into code w
 - If RTL support is required, validate spacing, alignment, icons, and navigation patterns under mirrored layout conditions.
 
 ### Design verification
-- High fidelity is expected, but exact pixel-perfect parity is not mandatory if deviations are minor and documented.
+- High fidelity is expected for production-facing or design-critical work, but exact pixel-perfect parity is not mandatory if deviations are minor and documented.
 
 ## Review Checklist
 
 - [ ] Styling is primarily implemented through theme, tokens, or shared components.
 - [ ] Similar interactions behave consistently across screens.
 - [ ] Responsive behavior works for required breakpoints.
-- [ ] Design verification has been done with screenshots when design artifacts exist.
+- [ ] Design verification has been done at an appropriate depth for the task; use screenshots when the work is fidelity-sensitive or regression-sensitive.
 - [ ] Internationalization readiness has been checked for copy length, formatting, and RTL behavior when relevant.
 
 ## Output Requirements
