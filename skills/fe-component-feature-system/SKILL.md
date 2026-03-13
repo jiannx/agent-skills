@@ -1,5 +1,5 @@
 ---
-name: frontend-component-feature-system
+name: fe-component-feature-system
 description: Build coherent component systems and feature-module structures with clear ownership boundaries, reusable abstractions, and maintainable shared UI patterns.
 ---
 

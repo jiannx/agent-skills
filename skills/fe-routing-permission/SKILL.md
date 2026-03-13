@@ -1,5 +1,5 @@
 ---
-name: frontend-routing-permission
+name: fe-routing-permission
 description: Design frontend navigation, route ownership, URL state, auth boundaries, and permission systems with explicit access rules and user-state handling.
 ---
 

@@ -1,5 +1,5 @@
 ---
-name: frontend-data-mock-state
+name: fe-data-mock-state
 description: Design frontend data layers, server-state handling, adapters, mock strategies, and state ownership with stable contracts and low integration churn.
 ---
 

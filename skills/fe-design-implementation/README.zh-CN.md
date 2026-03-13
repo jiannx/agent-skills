@@ -1,4 +1,4 @@
-# frontend-design-implementation
+# fe-design-implementation
 
 ## 定位
 
@@ -29,4 +29,4 @@
 
 - 优先通过 token、theme、shared components、variants 实现样式统一
 - 如果存在设计稿，完成后需要做截图比对和差异说明
-- 如果需要组件抽象或 feature 结构改造，可组合 `frontend-component-feature-system`
+- 如果需要组件抽象或 feature 结构改造，可组合 `fe-component-feature-system`

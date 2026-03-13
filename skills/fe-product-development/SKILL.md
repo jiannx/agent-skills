@@ -1,5 +1,5 @@
 ---
-name: frontend-product-development
+name: fe-product-development
 description: Build product-grade frontend projects with implementation guidance optimized for React ecosystems. Covers bootstrap, architecture, design implementation, data flow, testing, observability, release strategy, and long-term maintainability.
 ---
 
@@ -54,17 +54,17 @@ When the repo already exists, read and align with local conventions first. When 
 
 This file acts as the master skill. The sections below have been split into smaller child skills for finer-grained invocation.
 
-- `frontend-bootstrap-architecture`
+- `fe-bootstrap-architecture`
   Covers project initialization, framework selection, architecture, and environment baseline.
-- `frontend-routing-permission`
+- `fe-routing-permission`
   Covers routing strategy, permission system, guards, access states, and URL-state modeling.
-- `frontend-design-implementation`
+- `fe-design-implementation`
   Covers design implementation, interaction consistency, styling strategy, design verification, and responsive adaptation.
-- `frontend-component-feature-system`
+- `fe-component-feature-system`
   Covers component system, feature development pattern, shared abstractions, and module boundaries.
-- `frontend-data-mock-state`
+- `fe-data-mock-state`
   Covers data layer strategy, state strategy, mock strategy, adapters, and API integration.
-- `frontend-quality-operations`
+- `fe-quality-operations`
   Covers testing, performance review, observability, release strategy, and production-readiness checks.
 
 Prefer one or more child skills for narrow tasks. Use this master skill when the task spans multiple domains or when the correct implementation path is still unclear.
@@ -91,12 +91,12 @@ If the task is narrow, route to one or more child skills instead of expanding th
 - Do not recommend framework or architecture changes without confirming they are actually needed.
 
 3. Route the task to the right child skills.
-- Use `frontend-bootstrap-architecture` for bootstrap, framework choice, architecture, and environment baseline.
-- Use `frontend-routing-permission` for navigation, URL state, auth boundaries, and permission systems.
-- Use `frontend-design-implementation` for UI implementation, responsive behavior, styling strategy, and design verification.
-- Use `frontend-component-feature-system` for shared UI, component layering, and feature/module boundaries.
-- Use `frontend-data-mock-state` for API integration, state ownership, adapters, and mock-driven delivery.
-- Use `frontend-quality-operations` for testing, performance review, observability, release strategy, and production-readiness checks.
+- Use `fe-bootstrap-architecture` for bootstrap, framework choice, architecture, and environment baseline.
+- Use `fe-routing-permission` for navigation, URL state, auth boundaries, and permission systems.
+- Use `fe-design-implementation` for UI implementation, responsive behavior, styling strategy, and design verification.
+- Use `fe-component-feature-system` for shared UI, component layering, and feature/module boundaries.
+- Use `fe-data-mock-state` for API integration, state ownership, adapters, and mock-driven delivery.
+- Use `fe-quality-operations` for testing, performance review, observability, release strategy, and production-readiness checks.
 
 4. Recombine outputs into one coherent delivery plan.
 - Resolve conflicts between child-skill recommendations.
@@ -130,21 +130,21 @@ These apply regardless of which child skill is activated:
 Use this guide to choose the smallest useful skill set:
 
 - New repo, framework choice, or structural reset:
-  `frontend-bootstrap-architecture`
+  `fe-bootstrap-architecture`
 - Route guards, auth redirects, access control, or tenant-aware navigation:
-  `frontend-routing-permission`
+  `fe-routing-permission`
 - Figma-to-code, responsive UI, tokenized styling, or screenshot comparison:
-  `frontend-design-implementation`
+  `fe-design-implementation`
 - Shared UI, feature modules, design-system extraction, or refactoring repeated page structures:
-  `frontend-component-feature-system`
+  `fe-component-feature-system`
 - Query and mutation design, adapters, mock-first delivery, or state ownership:
-  `frontend-data-mock-state`
+  `fe-data-mock-state`
 - Locale-aware formatting, translation ownership, or i18n-ready UI delivery:
-  combine `frontend-bootstrap-architecture`, `frontend-design-implementation`, and `frontend-data-mock-state`
+  combine `fe-bootstrap-architecture`, `fe-design-implementation`, and `fe-data-mock-state`
 - Testing, observability, performance review, rollout, rollback, or release checks:
-  `frontend-quality-operations`
+  `fe-quality-operations`
 - Broad product delivery touching several of the above at once:
-  keep `frontend-product-development` as the controller and combine the needed child skills
+  keep `fe-product-development` as the controller and combine the needed child skills
 
 ## Output Requirements
 

@@ -1,4 +1,4 @@
-# frontend-component-feature-system
+# fe-component-feature-system
 
 ## 定位
 
@@ -29,4 +29,4 @@
 
 - 先判断模式是否稳定，再决定是否抽离公共组件
 - 不要把共享组件做成一堆样式开关的万能包装器
-- 如果任务同时涉及视觉实现，建议组合 `frontend-design-implementation`
+- 如果任务同时涉及视觉实现，建议组合 `fe-design-implementation`

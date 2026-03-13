@@ -1,4 +1,4 @@
-# frontend-routing-permission
+# fe-routing-permission
 
 ## 定位
 
@@ -30,4 +30,4 @@
 
 - 路由和权限通常一起设计，不建议完全割裂处理
 - 大访问边界放在 route level，小权限点放在 component 或 action level
-- 如果任务同时涉及数据和权限，可以再组合 `frontend-data-mock-state`
+- 如果任务同时涉及数据和权限，可以再组合 `fe-data-mock-state`

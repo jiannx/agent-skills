@@ -1,4 +1,4 @@
-# frontend-quality-operations
+# fe-quality-operations
 
 ## 定位
 
@@ -30,4 +30,4 @@
 
 - 高风险功能上线前优先使用这个 skill 做质量和发布收口
 - 如果任务还没完成接口和 UI 实现，不要过早展开完整发布方案
-- 如果任务同时涉及 mock-first 到真实接口切换，可组合 `frontend-data-mock-state`
+- 如果任务同时涉及 mock-first 到真实接口切换，可组合 `fe-data-mock-state`

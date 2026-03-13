@@ -1,4 +1,4 @@
-# frontend-bootstrap-architecture
+# fe-bootstrap-architecture
 
 ## 定位
 

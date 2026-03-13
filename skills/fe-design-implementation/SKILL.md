@@ -1,5 +1,5 @@
 ---
-name: frontend-design-implementation
+name: fe-design-implementation
 description: Implement product-grade frontend UI from design artifacts with consistent interaction patterns, theme-driven styling, responsive behavior, and design verification.
 ---
 

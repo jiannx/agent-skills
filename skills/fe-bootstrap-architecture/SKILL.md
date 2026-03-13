@@ -1,5 +1,5 @@
 ---
-name: frontend-bootstrap-architecture
+name: fe-bootstrap-architecture
 description: Initialize or restructure frontend projects with sound framework selection, project bootstrap, architecture, routing foundations, environment setup, and maintainable module boundaries.
 ---
 

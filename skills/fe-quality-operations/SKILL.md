@@ -1,5 +1,5 @@
 ---
-name: frontend-quality-operations
+name: fe-quality-operations
 description: Prepare frontend projects for reliable delivery with testing, performance review, observability, release strategy, and production-readiness checks.
 ---
 

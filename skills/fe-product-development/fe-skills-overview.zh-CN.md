@@ -6,15 +6,15 @@
 
 当前前端 skill 体系由 1 个主 skill 和 6 个子 skill 组成：
 
-- `frontend-product-development`
-- `frontend-bootstrap-architecture`
-- `frontend-routing-permission`
-- `frontend-design-implementation`
-- `frontend-component-feature-system`
-- `frontend-data-mock-state`
-- `frontend-quality-operations`
+- `fe-product-development`
+- `fe-bootstrap-architecture`
+- `fe-routing-permission`
+- `fe-design-implementation`
+- `fe-component-feature-system`
+- `fe-data-mock-state`
+- `fe-quality-operations`
 
-## 1. frontend-product-development
+## 1. fe-product-development
 
 定位：前端产品交付总控 skill。
 
@@ -34,7 +34,7 @@
 - 只处理一个接口接入。
 - 只做一个路由或一个权限点的小范围调整。
 
-## 2. frontend-bootstrap-architecture
+## 2. fe-bootstrap-architecture
 
 定位：前端项目初始化与基础架构 skill。
 
@@ -52,7 +52,7 @@
 - 现有项目前期架构梳理。
 - 需要决定框架、构建方式、基础目录结构。
 
-## 3. frontend-routing-permission
+## 3. fe-routing-permission
 
 定位：路由与权限系统 skill。
 
@@ -69,7 +69,7 @@
 - 菜单权限、按钮权限、字段权限。
 - 多租户、多角色、多能力点产品。
 
-## 4. frontend-design-implementation
+## 4. fe-design-implementation
 
 定位：设计稿落地与 UI 实现 skill。
 
@@ -87,7 +87,7 @@
 - 样式统一与设计修正。
 - 设计还原和截图比对。
 
-## 5. frontend-component-feature-system
+## 5. fe-component-feature-system
 
 定位：组件系统与 feature 模块结构 skill。
 
@@ -104,7 +104,7 @@
 - feature 模块结构改造。
 - 多页面重复结构重构。
 
-## 6. frontend-data-mock-state
+## 6. fe-data-mock-state
 
 定位：数据层、mock 策略与状态管理 skill。
 
@@ -123,7 +123,7 @@
 - 状态管理梳理。
 - 后端未完成时的前端独立开发。
 
-## 7. frontend-quality-operations
+## 7. fe-quality-operations
 
 定位：质量保障与交付运维 skill。
 
@@ -145,20 +145,20 @@
 
 按任务类型选择 skill：
 
-- 新项目、框架选择、架构初始化：`frontend-bootstrap-architecture`
-- 路由、鉴权、访问控制：`frontend-routing-permission`
-- 设计稿实现、响应式、样式统一：`frontend-design-implementation`
-- 组件抽象、feature 模块设计：`frontend-component-feature-system`
-- 接口、状态、mock、adapter：`frontend-data-mock-state`
-- 测试、监控、发布、回滚：`frontend-quality-operations`
+- 新项目、框架选择、架构初始化：`fe-bootstrap-architecture`
+- 路由、鉴权、访问控制：`fe-routing-permission`
+- 设计稿实现、响应式、样式统一：`fe-design-implementation`
+- 组件抽象、feature 模块设计：`fe-component-feature-system`
+- 接口、状态、mock、adapter：`fe-data-mock-state`
+- 测试、监控、发布、回滚：`fe-quality-operations`
 
 国际化相关任务通常需要组合使用：
 
-- 国际化基础设施、locale 策略、翻译资源组织：`frontend-bootstrap-architecture`
-- 文案展示、长文本适配、RTL、格式化显示：`frontend-design-implementation`
-- locale-sensitive API、格式化边界、翻译资源与状态归属：`frontend-data-mock-state`
+- 国际化基础设施、locale 策略、翻译资源组织：`fe-bootstrap-architecture`
+- 文案展示、长文本适配、RTL、格式化显示：`fe-design-implementation`
+- locale-sensitive API、格式化边界、翻译资源与状态归属：`fe-data-mock-state`
 
-如果任务同时跨越多个领域，先使用 `frontend-product-development` 作为总控入口，再组合使用相关子 skill。
+如果任务同时跨越多个领域，先使用 `fe-product-development` 作为总控入口，再组合使用相关子 skill。
 
 ## 使用原则
 

@@ -1,4 +1,4 @@
-# frontend-data-mock-state
+# fe-data-mock-state
 
 ## 定位
 
@@ -30,4 +30,4 @@
 
 - adapter 尽量靠近 feature 模块
 - mock 和 real service 的切换要显式、可控
-- 如果任务同时涉及权限和路由，可组合 `frontend-routing-permission`
+- 如果任务同时涉及权限和路由，可组合 `fe-routing-permission`
