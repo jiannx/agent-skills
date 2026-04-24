@@ -29,7 +29,7 @@ Use this skill to handle NocoBase bugfix work in a disciplined way: confirm the 
 1. Confirm the problem shape.
 - Read the user report carefully.
 - If the user provides a URL, treat it as context for locating the scene or code path. Open it in a browser only when the user explicitly requests browser-based reproduction or the task cannot be completed safely without it. Do not open the page inside VS Code.
-- If the user provides a `taskid`, fetch the task detail before changing code when that helps clarify the requirement.
+- If the user provides a `taskid`, or directly sends a plain numeric string, treat it as the task ID by default and fetch the task detail before changing code when that helps clarify the requirement.
 
 2. Reproduce before editing.
 - Identify the exact scene, component, block, field type, action path, and data context.
@@ -77,13 +77,14 @@ Use this skill to handle NocoBase bugfix work in a disciplined way: confirm the 
 
 ### If the user provides a `taskid`
 
-Use the project root `.env` to obtain `TEST_API_TOKEN`, then fetch task details with:
+Resolve `NOCOBASE_TEST_API_TOKEN` in this order: project root `.env`, system environment variables, then zsh environment. Then fetch task details with:
 
 ```bash
 curl 'https://test_management.v2.test.nocobase.com/nocobase/api/tasks:get?filterByTk={taskid}' \
-  -H 'authorization: Bearer {TEST_API_TOKEN}'
+  -H 'authorization: Bearer {NOCOBASE_TEST_API_TOKEN}'
 ```
 
+- If the user input is a plain numeric string such as `3317`, treat it as `taskid=3317` by default.
 - Ignore unrelated media or video-processing details unless they are directly needed to understand the bug.
 - If the fetched task description is ambiguous, confirm only the critical missing point.
 
