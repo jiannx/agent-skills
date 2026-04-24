@@ -1,17 +1,18 @@
 ---
 name: nocobase-bugfix
-description: Diagnose and fix NocoBase bugs with emphasis on v2 flow, client-v2, and plugin client models. Use when working on NocoBase issue reproduction, root-cause analysis, targeted code fixes, regression validation, or task-driven bug repair in `packages/core/client/src/flow`, `packages/core/flow-engine/src`, `packages/core/client-v2`, `packages/plugins`, or `packages/pro-plugins/@nocobase`. Default to fixing v2 only unless the user explicitly asks for v1 changes; use v1 schema implementations only as reference when v2 lacks equivalent support.
+description: Diagnose and fix NocoBase bugs with emphasis on v2 flow, client-v2, and plugin client models. Use when working on NocoBase issue reproduction, root-cause analysis, targeted code fixes, regression validation, task-driven bug repair, or narrow feature completion for missing v2 capability by referencing similar v1 behavior in `packages/core/client/src/flow`, `packages/core/flow-engine/src`, `packages/core/client-v2`, `packages/plugins`, or `packages/pro-plugins/@nocobase`. Default to fixing v2 only unless the user explicitly asks for v1 changes; use v1 schema implementations only as reference when v2 lacks equivalent support.
 ---
 
 # Nocobase Bugfix
 
 ## Overview
 
-Use this skill to handle NocoBase bugfix work in a disciplined way: confirm the problem shape, locate the root cause, make the smallest safe v2 change, then run focused regression checks. Treat v1 schema code as reference material unless the user explicitly asks to modify v1. Do not open a browser for reproduction or validation unless the user explicitly asks for it or the task clearly requires browser-based inspection.
+Use this skill to handle NocoBase bugfix work in a disciplined way: confirm the problem shape, locate the root cause or missing capability, make the smallest safe v2 change, then run focused regression checks. Some tasks are not pure bug fixes but v2 feature gaps; in those cases, reference the closest v1 behavior and implement the narrowest necessary v2 feature completion. Treat v1 schema code as reference material unless the user explicitly asks to modify v1. Do not open a browser for reproduction or validation unless the user explicitly asks for it or the task clearly requires browser-based inspection.
 
 ## Scope
 
 - Default to v2-only fixes.
+- This skill also covers narrow v2 feature completion when the real issue is missing v2 capability rather than a broken existing implementation.
 - Do not modify v1 schema code unless the user explicitly asks for it.
 - Use v1 implementations as reference when a feature exists in v1 but is missing or incomplete in v2.
 - Do not open a browser for reproduction or validation unless the user explicitly asks for it or browser inspection is necessary to complete the task safely.
@@ -28,6 +29,7 @@ Use this skill to handle NocoBase bugfix work in a disciplined way: confirm the 
 
 1. Confirm the problem shape.
 - Read the user report carefully.
+- Decide whether the task is a defect in existing v2 behavior or a missing v2 capability that should be implemented by referencing v1.
 - If the user provides a URL, treat it as context for locating the scene or code path. Open it in a browser only when the user explicitly requests browser-based reproduction or the task cannot be completed safely without it. Do not open the page inside VS Code.
 - If the user provides a `taskid`, or directly sends a plain numeric string, treat it as the task ID by default and fetch the task detail before changing code when that helps clarify the requirement.
 
@@ -44,6 +46,7 @@ Use this skill to handle NocoBase bugfix work in a disciplined way: confirm the 
 
 4. Implement the smallest safe fix.
 - Change the narrowest v2 location that fixes the actual cause.
+- If the issue is a missing v2 feature rather than a regression, implement the narrowest viable v2 feature completion that matches the relevant v1 behavior.
 - Avoid broad refactors during bugfix work unless they are necessary to remove the defect safely.
 - Preserve surrounding behavior and existing extension points.
 - If v2 lacks an implementation and v1 has it, port only the necessary idea, not the whole v1 structure.
@@ -64,7 +67,7 @@ Use this skill to handle NocoBase bugfix work in a disciplined way: confirm the 
 - For client-v2 issues, inspect feature entry, route, state wiring, adapters, and rendering boundaries before changing shared infrastructure.
 - For plugin issues, confirm whether the behavior is contributed by core flow models or plugin-side model registration.
 - Check whether scene-specific filtering, model inheritance, or dynamic menu/item generation is involved before assuming a rendering bug.
-- If behavior differs between v1 and v2, compare only the relevant implementation slice and extract the minimal missing behavior.
+- If behavior differs between v1 and v2, compare only the relevant implementation slice and extract the minimal missing behavior or capability needed in v2.
 
 ## URL And Task Handling
 
@@ -85,7 +88,6 @@ curl 'https://test_management.v2.test.nocobase.com/nocobase/api/tasks:get?filter
 ```
 
 - If the user input is a plain numeric string such as `3317`, treat it as `taskid=3317` by default.
-- Ignore unrelated media or video-processing details unless they are directly needed to understand the bug.
 - If the fetched task description is ambiguous, confirm only the critical missing point.
 
 ## Validation Standard
