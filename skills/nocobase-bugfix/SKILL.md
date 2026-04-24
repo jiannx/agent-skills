@@ -7,13 +7,14 @@ description: Diagnose and fix NocoBase bugs with emphasis on v2 flow, client-v2,
 
 ## Overview
 
-Use this skill to handle NocoBase bugfix work in a disciplined way: reproduce first, locate the root cause, make the smallest safe v2 change, then run focused regression checks. Treat v1 schema code as reference material unless the user explicitly asks to modify v1.
+Use this skill to handle NocoBase bugfix work in a disciplined way: confirm the problem shape, locate the root cause, make the smallest safe v2 change, then run focused regression checks. Treat v1 schema code as reference material unless the user explicitly asks to modify v1. Do not open a browser for reproduction or validation unless the user explicitly asks for it or the task clearly requires browser-based inspection.
 
 ## Scope
 
 - Default to v2-only fixes.
 - Do not modify v1 schema code unless the user explicitly asks for it.
 - Use v1 implementations as reference when a feature exists in v1 but is missing or incomplete in v2.
+- Do not open a browser for reproduction or validation unless the user explicitly asks for it or browser inspection is necessary to complete the task safely.
 - Prioritize these code areas:
   - `packages/core/client/src/flow`
   - `packages/core/client/src/flow/models`
@@ -27,12 +28,12 @@ Use this skill to handle NocoBase bugfix work in a disciplined way: reproduce fi
 
 1. Confirm the problem shape.
 - Read the user report carefully.
-- If the user provides a URL, reproduce in a browser. Do not open the page inside VS Code.
+- If the user provides a URL, treat it as context for locating the scene or code path. Open it in a browser only when the user explicitly requests browser-based reproduction or the task cannot be completed safely without it. Do not open the page inside VS Code.
 - If the user provides a `taskid`, fetch the task detail before changing code when that helps clarify the requirement.
 
 2. Reproduce before editing.
 - Identify the exact scene, component, block, field type, action path, and data context.
-- Prefer local reproduction, existing tests, or existing fixtures before writing new code.
+- Prefer code-path analysis, local reproduction without a browser, existing tests, or existing fixtures before writing new code.
 - If reproduction is blocked, gather the smallest missing fact and ask only a brief targeted question.
 
 3. Locate the root cause.
@@ -69,8 +70,9 @@ Use this skill to handle NocoBase bugfix work in a disciplined way: reproduce fi
 
 ### If the user provides a URL
 
-- Reproduce in a browser when possible.
-- Use browser tooling for verification and DOM/UI inspection.
+- Do not open a browser by default.
+- Use the URL to identify the relevant page, route, scene, or plugin entry first.
+- Open a browser only when the user explicitly asks for browser-based reproduction or verification, or when browser inspection is necessary to complete the task safely.
 - Do not open the webpage inside VS Code.
 
 ### If the user provides a `taskid`
@@ -88,7 +90,7 @@ curl 'https://test_management.v2.test.nocobase.com/nocobase/api/tasks:get?filter
 ## Validation Standard
 
 - Prefer regression tests close to the changed code.
-- If the bug is UI-only, combine focused automated tests with a short manual check when feasible.
+- If the bug is UI-only, prefer focused automated checks first; do manual browser verification only when the user explicitly asks for it or it is necessary to complete the task safely.
 - Verify that the fix does not reopen nearby scene-specific behavior, especially across:
   - block types
   - popup modes
