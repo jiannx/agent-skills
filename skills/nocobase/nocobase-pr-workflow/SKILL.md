@@ -1,15 +1,15 @@
 ---
 name: nocobase-pr-workflow
-description: Create a NocoBase task branch, commit current fix, push the remote branch, and prepare a pull request with the required template. Use when the user provides a taskid and asks to create a branch, commit, push, or open a PR for NocoBase work.
+description: Create a NocoBase task or conventional branch, commit current fix, push the remote branch, and prepare a pull request with the required template. Use when the user asks to create a branch, commit, push, or open a PR for NocoBase work, with or without a taskid.
 ---
 
 # NocoBase PR Workflow
 
-Use this skill after a NocoBase fix is implemented and the user wants the branch, commit, push, and PR flow handled.
+Use this skill after a NocoBase change is implemented and the user wants the branch, commit, push, and PR flow handled.
 
 ## Inputs
 
-- `taskid`; if the user sends a plain number, treat it as the task ID.
+- Optional `taskid`; if the user sends a plain number, treat it as the task ID.
 - Current base branch must be `main`, `next`, or `develop`. Do not invent other base branches.
 - PR type: bug fix, improvement, new feature, or other. Infer from context when obvious; ask only if risky.
 
@@ -19,19 +19,22 @@ Use this skill after a NocoBase fix is implemented and the user wants the branch
 2. Ensure the current branch is `main`, `next`, or `develop`. If not, stop and ask which allowed base branch to use.
 3. Review the diff and identify the relevant files to stage.
 4. Draft the full execution plan before changing git state:
-   - base branch and new branch name `task-{taskid}`
+   - base branch and new branch name
    - files that will be staged
    - concise conventional commit message generated from the actual changes
    - PR title
    - PR body using the template below
 5. Show the full execution plan and final PR title/body together, then ask the user to confirm. Do not create the branch, stage files, commit, push, or create/publish the PR before this confirmation.
-6. After confirmation, create or switch to `task-{taskid}` from the current base branch.
-7. Stage only the confirmed relevant files, commit with the confirmed message, and push with `git push -u origin task-{taskid}`.
+6. After confirmation, create or switch to the confirmed branch from the current base branch.
+7. Stage only the confirmed relevant files, commit with the confirmed message, and push with `git push -u origin <branch-name>`.
 8. Create the PR with the confirmed title/body using the repo's available tool, preferably `gh pr create`, then output the PR link.
 
 ## Branch Rules
 
-- Branch name: `task-{taskid}`.
+- If `taskid` is provided, branch name must be `task-{taskid}`.
+- If `taskid` is not provided, generate a conventional branch name from the actual changes and PR title, using `<type>/<short-kebab-summary>`, for example `fix/restore-filter-operator`, `feat/add-calendar-view`, or `docs/update-pr-workflow`.
+- Branch type should align with the change: `fix`, `feat`, `docs`, `refactor`, `test`, `chore`, `perf`, `build`, or `ci`.
+- Keep generated branch names lowercase ASCII, kebab-case, concise, and free of spaces or punctuation other than `/` and `-`.
 - For bug fixes or non-feature modifications, base should normally be `main`.
 - For new features or API modifications, base should normally be `next`.
 - `develop` is allowed only when the repo/user is already on it or explicitly requests it.
