@@ -17,12 +17,17 @@ Use this skill after a NocoBase fix is implemented and the user wants the branch
 
 1. Confirm the repo state with `git status --short` and current branch with `git branch --show-current`.
 2. Ensure the current branch is `main`, `next`, or `develop`. If not, stop and ask which allowed base branch to use.
-3. Create or switch to `task-{taskid}` from the current base branch.
-4. Review the diff and generate a concise conventional commit from the actual changes.
-5. Stage only relevant files, commit, and push with `git push -u origin task-{taskid}`.
-6. Draft a PR using the template below. Populate motivation, description, related issue/task, changelog, docs/checklists, and testing notes only when supported by the diff or conversation. If any content is missing or unknown, leave that section or table cell blank; for example, leave Docs links blank when no docs are provided.
-7. Before creating or publishing the PR, show the final PR title and body and ask the user to confirm.
-8. After confirmation, create the PR with the repo's available tool, preferably `gh pr create`, then output the PR link.
+3. Review the diff and identify the relevant files to stage.
+4. Draft the full execution plan before changing git state:
+   - base branch and new branch name `task-{taskid}`
+   - files that will be staged
+   - concise conventional commit message generated from the actual changes
+   - PR title
+   - PR body using the template below
+5. Show the full execution plan and final PR title/body together, then ask the user to confirm. Do not create the branch, stage files, commit, push, or create/publish the PR before this confirmation.
+6. After confirmation, create or switch to `task-{taskid}` from the current base branch.
+7. Stage only the confirmed relevant files, commit with the confirmed message, and push with `git push -u origin task-{taskid}`.
+8. Create the PR with the confirmed title/body using the repo's available tool, preferably `gh pr create`, then output the PR link.
 
 ## Branch Rules
 
@@ -36,6 +41,7 @@ Use this skill after a NocoBase fix is implemented and the user wants the branch
 
 - Base the commit message on the actual diff.
 - Prefer conventional commits, for example `fix: ...`, `feat: ...`, `chore: ...`.
+- Confirm the commit message together with the branch, staged files, and PR content before committing.
 - Keep one task in one commit unless the existing diff clearly contains unrelated work; then ask before staging.
 
 ## PR Template
