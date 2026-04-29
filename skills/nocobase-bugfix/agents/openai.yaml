@@ -1,4 +1,0 @@
-interface:
-  display_name: "NocoBase Bugfix"
-  short_description: "Fix NocoBase v2 flow, client-v2, and plugin bugs"
-  default_prompt: "Use $nocobase-bugfix to reproduce, diagnose, fix, and validate this NocoBase v2 issue."

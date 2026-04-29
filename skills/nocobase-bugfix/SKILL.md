@@ -1,112 +1,55 @@
 ---
 name: nocobase-bugfix
-description: Diagnose and fix NocoBase bugs with emphasis on v2 flow, client-v2, and plugin client models. Use when working on NocoBase issue reproduction, root-cause analysis, targeted code fixes, regression validation, task-driven bug repair, or narrow feature completion for missing v2 capability by referencing similar v1 behavior in `packages/core/client/src/flow`, `packages/core/flow-engine/src`, `packages/core/client-v2`, `packages/plugins`, or `packages/pro-plugins/@nocobase`. Default to fixing v2 only unless the user explicitly asks for v1 changes; use v1 schema implementations only as reference when v2 lacks equivalent support.
+description: Diagnose and fix NocoBase v2 bugs, especially flow, FlowModel, client-v2, and plugin client issues. Use for issue reproduction, root-cause analysis, targeted fixes, regression checks, or narrow v2 feature completion based on nearby v1 behavior. Default to v2-only changes unless the user explicitly asks for v1.
 ---
 
-# Nocobase Bugfix
+# NocoBase Bugfix
 
-## Overview
+## Defaults
 
-Use this skill to handle NocoBase bugfix work in a disciplined way: confirm the problem shape, locate the root cause or missing capability, make the smallest safe v2 change, then run focused regression checks. Some tasks are not pure bug fixes but v2 feature gaps; in those cases, reference the closest v1 behavior and implement the narrowest necessary v2 feature completion. Treat v1 schema code as reference material unless the user explicitly asks to modify v1. Do not open a browser for reproduction or validation unless the user explicitly asks for it or the task clearly requires browser-based inspection.
+- Fix v2 only. Treat v1 schema code as reference unless the user asks to modify v1.
+- Prefer code-path analysis, tests, and local reproduction before browser use. Open a browser only when explicitly requested or necessary.
+- Make the smallest safe change that fixes the cause, not just the symptom.
+- Search with `rg` first.
 
-## Scope
+## Where To Look
 
-- Default to v2-only fixes.
-- This skill also covers narrow v2 feature completion when the real issue is missing v2 capability rather than a broken existing implementation.
-- Do not modify v1 schema code unless the user explicitly asks for it.
-- Use v1 implementations as reference when a feature exists in v1 but is missing or incomplete in v2.
-- Do not open a browser for reproduction or validation unless the user explicitly asks for it or browser inspection is necessary to complete the task safely.
-- Prioritize these code areas:
-  - `packages/core/client/src/flow`
-  - `packages/core/client/src/flow/models`
-  - `packages/core/flow-engine/src`
-  - `packages/core/client-v2`
-  - `packages/plugins`
-  - `packages/pro-plugins/@nocobase`
-- For plugin v2 code, inspect `src/client/models` and `src/client-v2` first.
+- `packages/core/client/src/flow`
+- `packages/core/flow-engine/src`
+- `packages/core/client-v2`
+- Plugin packages: `packages/plugins`, `packages/pro-plugins/@nocobase`
+
+For plugin v2 bugs, search the plugin package first, then inspect `src/client-v2` and `src/client/models`.
 
 ## Workflow
 
-1. Confirm the problem shape.
-- Read the user report carefully.
-- Decide whether the task is a defect in existing v2 behavior or a missing v2 capability that should be implemented by referencing v1.
-- If the user provides a URL, treat it as context for locating the scene or code path. Open it in a browser only when the user explicitly requests browser-based reproduction or the task cannot be completed safely without it. Do not open the page inside VS Code.
-- If the user provides a `taskid`, or directly sends a plain numeric string, treat it as the task ID by default and fetch the task detail before changing code when that helps clarify the requirement.
+1. Identify the exact scene, component, block, field type, action path, and data context.
+2. Decide whether the issue is broken v2 behavior or missing v2 capability that should mirror v1.
+3. Trace from the user-visible entry point to the owning model, flow, renderer, schema initializer, plugin model, or engine helper.
+4. For flow bugs, identify the correct owner before editing: `FlowModel`, block model, `FieldModel`, `DisplayItemModel`, action, or plugin registration.
+5. Implement the narrowest v2 fix. If borrowing from v1, port only the behavior contract into the v2 architecture.
+6. Run focused tests or the smallest meaningful manual verification. State anything not verified.
 
-2. Reproduce before editing.
-- Identify the exact scene, component, block, field type, action path, and data context.
-- Prefer code-path analysis, local reproduction without a browser, existing tests, or existing fixtures before writing new code.
-- If reproduction is blocked, gather the smallest missing fact and ask only a brief targeted question.
+## FlowModel Rules
 
-3. Locate the root cause.
-- Search with `rg` first.
-- Trace from user-visible entry point to model, flow, renderer, schema initializer, plugin model, or engine helper.
-- Separate symptom from cause before patching.
-- Prefer understanding registration, scene filtering, model inheritance, flow step wiring, and context propagation before changing behavior.
+- Keep persistent settings in the model/flow path; do not add a second settings source or revive v1 `SchemaSettings` unless explicitly required.
+- Put configurable behavior into flows and steps (`registerFlow`, `steps`, `defaultParams`, `uiMode`, `uiSchema`) when it must persist or participate in the editor.
+- Use lifecycle hooks such as `beforeParamsSave` / `afterParamsSave` for save-time normalization or side effects.
+- Preserve registration and context contracts: check `scene`, model inheritance, `bindModelToInterface`, `registerModels`, `registerActions`, and plugin-side model registration before changing shared renderers.
+- Use namespace-aware text such as `tExpr(..., { ns })` for plugin FlowModel UI copy.
 
-4. Implement the smallest safe fix.
-- Change the narrowest v2 location that fixes the actual cause.
-- If the issue is a missing v2 feature rather than a regression, implement the narrowest viable v2 feature completion that matches the relevant v1 behavior.
-- Avoid broad refactors during bugfix work unless they are necessary to remove the defect safely.
-- Preserve surrounding behavior and existing extension points.
-- If v2 lacks an implementation and v1 has it, port only the necessary idea, not the whole v1 structure.
+## Task IDs
 
-5. Validate regressions.
-- Run the narrowest relevant tests first.
-- Add or update tests when the bug can be covered reliably.
-- If automated coverage is unavailable, perform the smallest meaningful manual verification and state what was not verified.
-
-## Investigation Guide
-
-- For flow UI issues, start from the visible block, field, action, or popup, then trace into:
-  - `packages/core/client/src/flow/models`
-  - `packages/core/client/src/flow/actions`
-  - `packages/core/client/src/flow/flows`
-  - `packages/core/flow-engine/src/components`
-  - `packages/core/flow-engine/src/models`
-- For client-v2 issues, inspect feature entry, route, state wiring, adapters, and rendering boundaries before changing shared infrastructure.
-- For plugin issues, confirm whether the behavior is contributed by core flow models or plugin-side model registration.
-- Check whether scene-specific filtering, model inheritance, or dynamic menu/item generation is involved before assuming a rendering bug.
-- If behavior differs between v1 and v2, compare only the relevant implementation slice and extract the minimal missing behavior or capability needed in v2.
-
-## URL And Task Handling
-
-### If the user provides a URL
-
-- Do not open a browser by default.
-- Use the URL to identify the relevant page, route, scene, or plugin entry first.
-- Open a browser only when the user explicitly asks for browser-based reproduction or verification, or when browser inspection is necessary to complete the task safely.
-- Do not open the webpage inside VS Code.
-
-### If the user provides a `taskid`
-
-Resolve `NOCOBASE_TEST_API_TOKEN` in this order: project root `.env`, system environment variables, then zsh environment. Then fetch task details with:
+If the user provides `taskid` or a plain numeric string, treat it as a task ID and fetch details when useful. Resolve `NOCOBASE_TEST_API_TOKEN` from project `.env`, environment variables, then zsh environment.
 
 ```bash
 curl 'https://test_management.v2.test.nocobase.com/nocobase/api/tasks:get?filterByTk={taskid}' \
   -H 'authorization: Bearer {NOCOBASE_TEST_API_TOKEN}'
 ```
 
-- If the user input is a plain numeric string such as `3317`, treat it as `taskid=3317` by default.
-- If the fetched task description is ambiguous, confirm only the critical missing point.
+## Closing Format
 
-## Validation Standard
-
-- Prefer regression tests close to the changed code.
-- If the bug is UI-only, prefer focused automated checks first; do manual browser verification only when the user explicitly asks for it or it is necessary to complete the task safely.
-- Verify that the fix does not reopen nearby scene-specific behavior, especially across:
-  - block types
-  - popup modes
-  - field interfaces
-  - plugin-provided models
-  - v1/v2 coexistence boundaries
-- State residual risks explicitly if full verification is not possible.
-
-## Output Format
-
-When closing the task, include a bilingual change log in Chinese and English. Keep it concise and practical.
-
-Use this shape:
+End with a concise bilingual summary:
 
 ```md
 问题原因：
@@ -114,20 +57,10 @@ Use this shape:
 
 变更日志：
 - fix: ...
-- fix: 修复 ... 场景下的 ...
 
 Cause:
 - ...
 
 Changelog:
 - fix: ...
-- fix: resolve ... in the ... scenario
 ```
-
-## Working Rules
-
-- Diagnose before patching.
-- Prefer minimal, local changes over broad rewrites.
-- Protect existing behavior.
-- Keep the user informed of assumptions when they affect scope.
-- If a test, command, or repro step cannot be completed, say so directly.
