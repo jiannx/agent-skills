@@ -20,7 +20,7 @@ Use this skill after a NocoBase fix is implemented and the user wants the branch
 3. Create or switch to `task-{taskid}` from the current base branch.
 4. Review the diff and generate a concise conventional commit from the actual changes.
 5. Stage only relevant files, commit, and push with `git push -u origin task-{taskid}`.
-6. Draft a PR using the template below. Populate motivation, description, related issue/task, changelog, docs/checklists, and testing notes from the diff and conversation.
+6. Draft a PR using the template below. Populate motivation, description, related issue/task, changelog, docs/checklists, and testing notes only when supported by the diff or conversation. If any content is missing or unknown, leave that section or table cell blank; for example, leave Docs links blank when no docs are provided.
 7. Before creating or publishing the PR, show the final PR title and body and ask the user to confirm.
 8. After confirmation, create the PR with the repo's available tool, preferably `gh pr create`, then output the PR link.
 
@@ -39,6 +39,8 @@ Use this skill after a NocoBase fix is implemented and the user wants the branch
 - Keep one task in one commit unless the existing diff clearly contains unrelated work; then ask before staging.
 
 ## PR Template
+
+When creating the PR body, keep the template structure. Fill only fields that have clear evidence from the task, diff, or user-provided context. Leave unavailable content blank instead of inventing placeholders, links, screenshots, changelog text, tests, or docs.
 
 ```md
 <!--
