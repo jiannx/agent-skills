@@ -22,7 +22,7 @@ Use this skill after a NocoBase change is implemented and the user wants the bra
    - base branch and new branch name
    - files that will be staged
    - concise conventional commit message generated from the actual changes
-   - PR title
+   - PR title following the PR title rules below
    - PR body using the template below
 5. Show the full execution plan and final PR title/body together, then ask the user to confirm. Do not create the branch, stage files, commit, push, or create/publish the PR before this confirmation.
 6. After confirmation, create or switch to the confirmed branch from the current base branch.
@@ -46,6 +46,13 @@ Use this skill after a NocoBase change is implemented and the user wants the bra
 - Prefer conventional commits, for example `fix: ...`, `feat: ...`, `chore: ...`.
 - Confirm the commit message together with the branch, staged files, and PR content before committing.
 - Keep one task in one commit unless the existing diff clearly contains unrelated work; then ask before staging.
+
+## PR Title Rules
+
+- PR title must use a conventional commit-style prefix, such as `fix: ...`, `feat: ...`, `chore: ...`, `docs: ...`, or `refactor: ...`.
+- If the current change belongs to a specific plugin, include the plugin name as the scope, for example `feat(kanban): ...`, `fix(calendar): ...`, or `chore(auth): ...`.
+- Infer the plugin scope from changed paths, package names, or clear domain context. Omit the scope when the change is repo-wide or no specific plugin is evident.
+- Keep the PR title concise and aligned with the confirmed commit message unless the PR needs a broader summary.
 
 ## PR Template
 
