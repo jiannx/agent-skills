@@ -1,33 +1,87 @@
 ---
 name: nocobase-pr-workflow
-description: Create a NocoBase task or conventional branch, commit current fix, push the remote branch, and prepare a pull request with the required template. Use when the user asks to create a branch, commit, push, or open a PR for NocoBase work, with or without a taskid.
+description: Create a NocoBase task or conventional branch, commit current fix, push the remote branch, and create a pull request with the repository template. Use when the user asks to create a branch, commit, push, or open a PR for NocoBase work, with or without a taskid; includes required base-branch confirmation, changelog drafting, PR duplicate checks, and `gh pr create`.
 ---
 
 # NocoBase PR Workflow
 
 Use this skill after a NocoBase change is implemented and the user wants the branch, commit, push, and PR flow handled.
 
+For PR creation only on an already committed branch, skip the branch/commit steps but still follow the PR creation, base-branch, changelog, and safety rules below.
+
+## Target Repository
+
+Do not assume the workspace root is the git repo to operate on.
+
+- First identify the target git repository for the requested change.
+- Prefer the deepest git root that contains the relevant changed files or the user-specified path.
+- Some NocoBase plugins live in independent repositories nested under the main workspace, for example `packages/pro-plugins` or `packages/pro-plugins/@nocobase/plugin-email-manager`.
+- Use `git -C <candidate-path> rev-parse --show-toplevel` to resolve the repo root from the most specific relevant path.
+- Run all `git`, `gh`, and `.github/pull_request_template.md` checks against that target repo root, not blindly against the monorepo root.
+- If the requested changes span multiple git repositories, stop and ask the user which repository to handle first. Do not mix branch, commit, push, or PR operations across repos in one pass.
+
 ## Inputs
 
 - Optional `taskid`; if the user sends a plain number, treat it as the task ID.
-- Current base branch must be `main`, `next`, or `develop`. Do not invent other base branches.
+- Optional target path or plugin path. Infer it from changed files or the user's request when possible.
+- Base branch for the PR. Ask `Which base branch should I use for the PR?` before creating the PR unless the user already answered it in the current conversation. Do not silently default to `main` or `next`.
+- Current base branch for creating a new work branch must be `main`, `next`, or `develop`. Do not invent other local base branches.
 - PR type: bug fix, improvement, new feature, or other. Infer from context when obvious; ask only if risky.
 
 ## Workflow
 
-1. Confirm the repo state with `git status --short` and current branch with `git branch --show-current`.
-2. Ensure the current branch is `main`, `next`, or `develop`. If not, stop and ask which allowed base branch to use.
-3. Review the diff and identify the relevant files to stage.
-4. Draft the full execution plan before changing git state:
+1. Identify the target repository root before any git operation.
+2. Confirm the target repo state with `git status --short` and current branch with `git branch --show-current`.
+3. If creating a new branch, ensure the current branch in the target repo is `main`, `next`, or `develop`. If not, stop and ask which allowed local base branch to use.
+4. Review the diff in the target repo and identify the relevant files to stage.
+5. Draft the full execution plan before changing git state:
+   - target repository root
    - base branch and new branch name
    - files that will be staged
    - concise conventional commit message generated from the actual changes
    - PR title following the PR title rules below
-   - PR body using the template below
-5. Show the full execution plan and final PR title/body together, then ask the user to confirm. Do not create the branch, stage files, commit, push, or create/publish the PR before this confirmation.
-6. After confirmation, create or switch to the confirmed branch from the current base branch.
-7. Stage only the confirmed relevant files, commit with the confirmed message, and push with `git push -u origin <branch-name>`.
-8. Create the PR with the confirmed title/body using the repo's available tool, preferably `gh pr create`, then output the PR link.
+   - PR body using `.github/pull_request_template.md`
+6. Show the full execution plan and final PR title/body together, then ask the user to confirm. Do not create the branch, stage files, commit, push, or create/publish the PR before this confirmation.
+7. After confirmation, create or switch to the confirmed branch from the current base branch in the target repo.
+8. Stage only the confirmed relevant files, commit with the confirmed message, and push with `git push -u origin <branch-name>` from the target repo.
+9. Before creating the PR, confirm the PR base branch from the user if not already confirmed in the current conversation.
+10. Read `.github/pull_request_template.md` from the target repo, compare `HEAD` with `origin/<base>`, check for existing PRs for the branch, then create the PR with `gh pr create`.
+11. Output the target repo, pushed branch, base branch, PR link, and any warnings.
+
+## PR Creation Workflow
+
+Run this sequence from the target repo root:
+
+1. Check branch and local state:
+   ```bash
+   git branch --show-current
+   git status --short
+   ```
+2. Confirm the branch contains the intended commit before pushing:
+   ```bash
+   git log --oneline -5
+   ```
+3. Push the current branch to `origin` if needed:
+   ```bash
+   git push -u origin <branch-name>
+   ```
+4. Read the repository PR template:
+   ```bash
+   sed -n '1,220p' .github/pull_request_template.md
+   ```
+5. Compare the branch against the confirmed PR base:
+   ```bash
+   git diff --stat origin/<base>...HEAD
+   git log --reverse --format=%s origin/<base>..HEAD
+   ```
+6. Check whether a PR already exists for the branch:
+   ```bash
+   gh pr status
+   ```
+7. Create the PR:
+   ```bash
+   gh pr create --base <base> --head <branch-name> --title "<title>" --body-file <body-file>
+   ```
 
 ## Branch Rules
 
@@ -56,60 +110,49 @@ Use this skill after a NocoBase change is implemented and the user wants the bra
 
 ## PR Template
 
-When creating the PR body, keep the template structure. Fill only fields that have clear evidence from the task, diff, or user-provided context. Leave unavailable content blank instead of inventing placeholders, links, screenshots, changelog text, tests, or docs.
+Always read `.github/pull_request_template.md` from the target repository and keep its structure intact. Fill only fields that have clear evidence from the task, diff, or user-provided context. Leave unavailable links, screenshots, docs, or issue references blank instead of inventing placeholders.
 
-```md
-<!--
-First of all, thank you for your contribution!
-For bug fixes or other non-feature modifications, please base your branch on the main branch.
-For new features or API modifications, please make sure your branch is based on the next branch.
-Thank you!
--->
+If the target repo does not contain `.github/pull_request_template.md`, say so clearly and ask the user whether to continue with a manually prepared PR body.
 
-### This is a ...
-- [ ] New feature
-- [ ] Improvement
-- [ ] Bug fix
-- [ ] Others
+Before `gh pr create`, confirm no template TODOs or accidental placeholder text remain in fields you filled.
 
-### Motivation
-<!-- Please explain the reason of the changes made in this PR. -->
+## Changelog Rules
 
-### Description
-<!--
-Please describe the key changes made in this PR clearly and concisely,
-mention any potential risks,
-and provide some testing suggestions.
--->
+Write changelog entries from the user-visible behavior, not from the commit message.
 
-### Related issues
+- Do not reuse the commit message.
+- Do not write `fix(xxx): ...`, `feat(xxx): ...`, or similar commit-style prefixes.
+- Describe the actual user-visible change.
+- Keep English and Chinese lines aligned in meaning.
+- Leave changelog blank only when the change is clearly internal and no changelog is needed.
 
-### Showcase
-<!-- Including any screenshots of the changes. -->
+Good examples:
 
-### Changelog
+- `Fixed belongsTo queries when the source collection uses a non-primary filterTargetKey as its unique identifier`
+- `修复源表使用非主键 filterTargetKey 作为唯一标识时 belongsTo 查询报错的问题`
 
-| Language   | Changelog |
-| ---------- | --------- |
-| 🇺🇸 English |       |
-| 🇨🇳 Chinese |       |
+Bad example:
 
-### Docs
+- `fix(database): support belongsTo query by filter target key`
 
-| Language   | Link |
-| ---------- | --------- |
-| 🇺🇸 English |  <!-- [Title](link) -->    |
-| 🇨🇳 Chinese |  <!-- [标题](link) -->  |
+## Safety Checks
 
-### Checklists
-- [ ] All changes have been self-tested and work as expected
-- [ ] Test cases are updated/provided or not needed
-- [ ] Doc is updated/provided or not needed
-- [ ] Component demo is updated/provided or not needed
-- [ ] Changelog is provided or not needed
-- [ ] Request a code review if it is necessary
-```
+Before `git push`:
+
+- Confirm the branch contains the intended commit.
+- Warn if there are uncommitted local files; do not include unrelated files.
+- Confirm the push is happening from the intended target repo, especially when working under nested plugin paths.
+
+Before `gh pr create`:
+
+- Confirm the PR base branch from the user.
+- Confirm the target repo root being used.
+- Confirm `.github/pull_request_template.md` was read.
+- Confirm the branch was compared with `origin/<base>`.
+- Confirm no PR already exists for the branch, or report the existing PR instead of creating a duplicate.
+- Confirm no template TODOs remain in filled content.
+- State clearly if tests were not run.
 
 ## Output
 
-Report branch name, commit hash/message, pushed remote branch, and PR link.
+Report target repo path, branch name, commit hash/message when a commit was created, pushed remote branch, base branch used, PR link, and any remaining warnings.
